@@ -36,11 +36,22 @@ pipeline {
             }
         }
         stage('Autoscale') {
-      steps {
-        // Trigger the GKE cluster autoscaling here
-        sh 'gcloud container clusters resize my-gke-cluster --size=3 --region=europe-west1-b'
-       }
-     }
+  steps {
+    script {
+      def minNodes = 2
+      def maxNodes = 5
+
+      def currentNodes = sh(returnStdout: true, script: "gcloud container clusters describe my-gke-cluster --format='value(currentNodeCount)'").trim()
+
+      if (currentNodes.toInteger() < minNodes) {
+        sh "gcloud container clusters resize my-gke-cluster --size=$minNodes --region=europe-west1-b"
+      } else if (currentNodes.toInteger() > maxNodes) {
+        sh "gcloud container clusters resize my-gke-cluster --size=$maxNodes --region=europe-west1-b"
+      }
+    }
+  }
+}
+
         // stage('Deploy') {
         //     steps {
         //         // Use Ansible to deploy to your Kubernetes cluster
