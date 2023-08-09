@@ -27,6 +27,7 @@ pipeline {
                         error 'Test failed: "Hello, Jenkins!" message not found.'
                     }
                 }
+      }
     }
     stage('Deploy') {
       steps {
@@ -41,4 +42,4 @@ pipeline {
      }
    }
  }
-}
+
