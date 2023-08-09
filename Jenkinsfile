@@ -37,7 +37,8 @@ pipeline {
       steps {
         // Trigger the GKE cluster autoscaling here
         sh 'gcloud container clusters resize my-gke-cluster --size=3 --region=europe-west1-b'
-      }
-    }
-  }
+       }
+     }
+   }
+ }
 }
