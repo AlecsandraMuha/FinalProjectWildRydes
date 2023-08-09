@@ -16,7 +16,7 @@ pipeline {
         }
         stage('Build') {
       steps {
-        sh 'docker build -t gcr.io/intrepid-period-395206/my-html-css-app -f dockerfile /var/jenkins_home/workspace/My_CICD_ProjectPipeline/FinalProjectWildRydes'
+        sh 'docker build -t gcr.io/intrepid-period-395206/my-html-css-app /var/jenkins_home/workspace/My_CICD_ProjectPipeline/FinalProjectWildRydes/'
       }
     }
 
