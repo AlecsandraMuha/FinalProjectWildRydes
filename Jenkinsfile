@@ -14,14 +14,12 @@ pipeline {
                 checkout scm
             }
         }
-        
-        // stage('Build') {
-        //     steps {
-        //         // Build your Docker image
-        //         sh 'docker build -t website_image .'
-        //     }
-        // }
-        
+        stage('Build') {
+      steps {
+        sh 'docker build -t gcr.io/intrepid-period-395206/my-html-css-app:$BUILD_NUMBER .'
+      }
+    }
+
         stage('Unit Test') {
             steps {
                 script {
