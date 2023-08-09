@@ -35,22 +35,24 @@ pipeline {
                 }
             }
         }
-        stage('Autoscale') {
+       stage('Autoscale') {
   steps {
     script {
       def minNodes = 2
       def maxNodes = 5
 
-      def currentNodes = sh(returnStdout: true, script: "gcloud container clusters describe my-gke-cluster --format='value(currentNodeCount)'").trim()
+      def gcloudPath = sh(returnStdout: true, script: "which gcloud").trim()
+      def currentNodes = sh(returnStdout: true, script: "${gcloudPath} container clusters describe my-gke-cluster --format='value(currentNodeCount)'").trim()
 
       if (currentNodes.toInteger() < minNodes) {
-        sh "gcloud container clusters resize my-gke-cluster --size=$minNodes --region=europe-west1-b"
+        sh "${gcloudPath} container clusters resize my-gke-cluster --size=$minNodes --region=europe-west1-b"
       } else if (currentNodes.toInteger() > maxNodes) {
-        sh "gcloud container clusters resize my-gke-cluster --size=$maxNodes --region=europe-west1-b"
+        sh "${gcloudPath} container clusters resize my-gke-cluster --size=$maxNodes --region=europe-west1-b"
       }
     }
   }
 }
+
 
         // stage('Deploy') {
         //     steps {
