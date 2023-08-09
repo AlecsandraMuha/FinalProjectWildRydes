@@ -1,0 +1,5 @@
+# Use a base image with a lightweight web server
+FROM nginx:alpine
+
+# Copy your HTML and CSS files into the container
+COPY . /usr/share/nginx/html
