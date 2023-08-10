@@ -1,6 +1,11 @@
 pipeline {
     agent any
-    
+    environment{
+        PROJECT_ID = "intrepid-period-395206"
+        CLUSTER_NAME = "my-gke-cluster"
+        LOCATION = "europe-west1-b"
+        CREDENTIALS_ID = "8f3b3c69e6bc98803131aeb6fdc200bbafe73cb6"
+    }
     stages {
         stage('Hello') {
             steps {
@@ -43,15 +48,19 @@ pipeline {
             }
         }
 
-        stage('Deploy'){
+        stage('Deploy to K8s') {
             steps{
-                //Deploy with Kubernetes
-                //sh 'kubectl config use-context my-gke-cluster'
-                sh 'kubectl apply -f /var/jenkins_home/workspace/My_CICD_ProjectPipeline/KubernetesPart/deployment.yaml'
-                sh 'kubectl apply -f /var/jenkins_home/workspace/My_CICD_ProjectPipeline/KubernetesPart/service.yaml'
-                sh 'kubectl apply -f /var/jenkins_home/workspace/My_CICD_ProjectPipeline/KubernetesPart/autoscale.yaml'
+                sh "sed -i 's/pipeline:latest/pipeline:${env.BUILD_ID}/g' deployment.yaml"
+                step([$class: 'KubernetesEngineBuilder', \
+                  projectId: env.PROJECT_ID, \
+                  clusterName: env.CLUSTER_NAME, \
+                  location: env.LOCATION, \
+                  manifestPattern: 'deployment.yaml', \
+                  credentialsId: env.CREDENTIALS_ID, \
+                  verifyDeployments: true])
+                }
             }
-        }
+        } 
         // stage('Deploy') {
         //     steps {
         //         // Use Ansible to deploy to your Kubernetes cluster
