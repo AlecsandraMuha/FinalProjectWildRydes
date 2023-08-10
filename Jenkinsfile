@@ -35,7 +35,7 @@ pipeline {
             steps {
                 script {
                     // Build the Docker image using the Dockerfile
-                    dockerImage = docker.build("ansible-image:${env.BUILD_ID}", '.')
+                    dockerImage = docker.build("/var/jenkins_home/workspace/websitePipeline/:${env.BUILD_ID}", '.')
                 }
             }
         }
