@@ -26,18 +26,16 @@ pipeline {
                 }
             }
         }
-    
-        stage('Build Docker Image') {
+         stage('Build') {
             steps {
-               sh 'docker build -t grc.io/intrepid-period-395206/ansible-image /var/jenkins_home/workspace/My_CICD_ProjectPipeline/'
-                }
-            }
-        
-
-        stage('Run Ansible Playbook') {
-            steps{
-                        sh 'ansible-playbook -i inventory.ini playbook.yaml '
-                    }
-                }
+                // Build the Docker image
+                sh 'docker build -t gcr.io/intrepid-period-395206/my-html-css-app /var/jenkins_home/workspace/My-CICD-ProjectPipeline/FinalProjectWildRydes/'
             }
         }
+        
+        stage('Tag & Push') {
+            steps {
+                //  Tag the Docker image with GCR URL
+                 sh 'docker tag website_image gcr.io/intrepid-period-395206/my-html-css-app'
+    }
+}
