@@ -9,4 +9,4 @@ WORKDIR /ansible
 # Copy the playbook and inventory files to the container
 COPY playbook.yaml inventory.ini ./
 
-CMD ["ansible-playbook", "-i", "inventory.ini", "playbook.yml"]
+CMD ["ansible-playbook", "-i", "inventory.ini", "playbook.yaml"]

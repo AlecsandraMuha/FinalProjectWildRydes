@@ -37,7 +37,7 @@ pipeline {
             steps {
                 //  Tag the Docker image with GCR URL
                  sh 'docker tag my-html-css-app gcr.io/intrepid-period-395206/my-html-css-app'
-    }
-
+     }
+   }
+  }
 }
-    }}
