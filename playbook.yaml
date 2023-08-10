@@ -10,11 +10,11 @@
     #- name: Authenticate with Google Cloud Registry
      # shell: gcloud auth configure-docker --quiet
 
-    - name: Tag Docker image
-      shell: docker tag my-html-css-app:latest gcr.io/intrepid-period-395206/my-html-css-app:latest
+    #- name: Tag Docker image
+    #  shell: docker tag my-html-css-app:latest gcr.io/intrepid-period-395206/my-html-css-app:latest
 
-    - name: Push Docker image to Google Cloud Registry
-      shell: docker push gcr.io/intrepid-period-395206/my-html-css-app:latest
+    #- name: Push Docker image to Google Cloud Registry
+     # shell: docker push gcr.io/intrepid-period-395206/my-html-css-app:latest
 
     - name: Apply Kubernetes Deployment
       shell: kubectl create deployment webapp-deployment --image=gcr.io/intrepid-period-395206/my-html-css-app:latest
