@@ -35,10 +35,11 @@ pipeline {
         }
 
       stage('Deploy with Ansible') {
-            steps {
-                // Run Ansible playbook
-                sh 'ansible-playbook -i inventory.ini playbook.yml'
-            }
+            steps {script {
+                    dockerImage.inside('-v $PWD:/ansible') {
+                        sh 'ansible-playbook -i inventory.ini playbook.yml'
+                    }
+                }
         }
         } 
         // stage('Deploy') {
