@@ -27,12 +27,32 @@ pipeline {
             }
         }
 
-      stage('Deploy with Ansible') {
+      pipeline {
+    agent any
+
+    stages {
+        stage('Build Docker Image') {
             steps {
-                        sh 'ansible-playbook -i inventory.ini playbook.yml'
-                
+                script {
+                    // Build the Docker image using the Dockerfile
+                    dockerImage = docker.build("ansible-image:${env.BUILD_ID}", '.')
                 }
+            }
         }
+
+        stage('Run Ansible Playbook') {
+            steps {
+                script {
+                    // Run the Ansible playbook using a Docker container
+                    dockerImage.inside('-v $PWD:/ansible') {
+                        sh 'ansible-playbook -i inventory.ini playbook.yaml'
+                    }
+                }
+            }
+        }
+    }
+}
+
         
         // stage('Deploy') {
         //     steps {
