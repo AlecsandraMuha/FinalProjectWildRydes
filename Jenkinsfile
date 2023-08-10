@@ -29,7 +29,7 @@ pipeline {
     
         stage('Build Docker Image') {
             steps {
-               sh 'docker build -t /var/jenkins_home/workspace/My_CICD_ProjectPipeline/'
+               sh 'docker build -t /var/jenkins_home/workspace/My_CICD_ProjectPipeline/ .'
                 }
             }
         
