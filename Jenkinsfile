@@ -39,7 +39,7 @@ pipeline {
                  sh 'docker tag my-html-css-app  gcr.io/intrepid-period-395206/my-html-css-app'
 
                 //  Push the image to GCR
-                sh 'docker push  gcr.io/intrepid-period-395206/my-html-css-app'
+                //sh 'docker push  gcr.io/intrepid-period-395206/my-html-css-app'
             }
         }
 
