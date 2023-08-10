@@ -29,7 +29,7 @@ pipeline {
          stage('Build') {
             steps {
                 // Build the Docker image
-                sh 'docker build -t gcr.io/intrepid-period-395206/my-html-css-app /var/jenkins_home/workspace/My-CICD-ProjectPipeline/FinalProjectWildRydes/'
+                sh 'docker build -t gcr.io/intrepid-period-395206/my-html-css-app /var/jenkins_home/workspace/My_CICD_ProjectPipeline/FinalProjectWildRydes/'
             }
         }
         
