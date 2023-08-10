@@ -48,4 +48,5 @@ pipeline {
         //         sh 'ansible-playbook deployment.yaml'  // Replace with your playbook
         //     }
         // }
-    }
+    } 
+}
