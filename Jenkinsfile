@@ -46,7 +46,7 @@ pipeline {
         stage('Deploy'){
             steps{
                 //Deploy with Kubernetes
-                sh 'kubectl apply -f /var/jenkins_home/workspace/My_CICD_ProjectPipeline/KubernetesPart/deployment.yaml --context my-gke-cluster'
+                sh 'kubectl apply -f /var/jenkins_home/workspace/My_CICD_ProjectPipeline/KubernetesPart/deployment.yaml --context webapp-deployment'
                 sh 'kubectl apply -f /var/jenkins_home/workspace/My_CICD_ProjectPipeline/KubernetesPart/service.yaml --context my-gke-cluster'
                 sh 'kubectl apply -f /var/jenkins_home/workspace/My_CICD_ProjectPipeline/KubernetesPart/autoscale.yaml --context my-gke-cluster'
             }
