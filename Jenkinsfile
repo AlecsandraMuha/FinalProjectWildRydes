@@ -26,11 +26,7 @@ pipeline {
                 }
             }
         }
-
-      pipeline {
-    agent any
-
-    stages {
+    
         stage('Build Docker Image') {
             steps {
                 script {
@@ -51,14 +47,4 @@ pipeline {
             }
         }
     }
-}
-
-        
-        // stage('Deploy') {
-        //     steps {
-        //         // Use Ansible to deploy to your Kubernetes cluster
-        //         sh 'ansible-playbook deployment.yaml'  // Replace with your playbook
-        //     }
-        // }
-    } 
 }
