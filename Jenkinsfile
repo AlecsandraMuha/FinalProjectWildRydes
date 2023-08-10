@@ -28,8 +28,9 @@ pipeline {
         }
          stage('Build') {
             steps {
-                // Build the Docker image
-                sh 'docker build -t ansible-image .'
+                script {
+                    dockerImage = docker.build("my-custom-ansible-image:${env.BUILD_ID}", '.')
+                }
             }
         }
 
