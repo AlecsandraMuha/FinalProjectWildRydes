@@ -22,3 +22,99 @@ resource "google_sql_database_instance" "my_database" {
   }
    deletion_protection = false
 }
+# Define VPC Network
+resource "google_compute_network" "my_network" {
+  name = "my-network-project"
+}
+
+# Define Subnets
+resource "google_compute_subnetwork" "frontend_subnet" {
+  name          = "frontend-subnet"
+  region        = "europe-west1"
+  ip_cidr_range = "10.0.1.0/24"
+  network       = google_compute_network.my_network.self_link
+}
+
+resource "google_compute_subnetwork" "backend_subnet" {
+  name          = "backend-subnet"
+  region        = "europe-west1"
+  ip_cidr_range = "10.0.2.0/24"
+  network       = google_compute_network.my_network.self_link
+}
+
+# Define Firewall Rules
+resource "google_compute_firewall" "allow_http" {
+  name    = "allow-http"
+  network = google_compute_network.my_network.self_link
+
+  allow {
+    protocol = "tcp"
+    ports    = ["80", "443"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+}
+# Define Google Cloud Storage bucket
+resource "google_storage_bucket" "my_bucket" {
+  name = "website2-bucket1"
+  location = "europe-west1"
+}
+
+resource "google_compute_address" "my_static_ip" {
+  name = "my-static-ip"
+}
+
+
+# Define HTTP(S) Load Balancers
+resource "google_compute_backend_bucket" "my_backend_bucket_project" {
+  name        = "my-backend-bucket-project"
+  bucket_name = google_storage_bucket.my_bucket.name
+}
+
+resource "google_compute_url_map" "my_url_map" {
+  name    = "my-url-map"
+  default_service = google_compute_backend_bucket.my_backend_bucket_project.self_link
+}
+resource "google_compute_target_http_proxy" "my_target_http_proxy" {
+  name    = "my-target-http-proxy"
+  url_map = google_compute_url_map.my_url_map.self_link
+}
+resource "google_compute_target_https_proxy" "my_target_proxy" {
+  name    = "my-target-proxy"
+   ssl_certificates = [google_sql_ssl_cert.my_ssl_cert.id]
+  url_map = google_compute_url_map.my_url_map.self_link
+}
+
+
+# # Define the HTTP forwarding rule
+# resource "google_compute_global_forwarding_rule" "http_rule" {
+#   name       = "http-rule"
+#   target     = google_compute_url_map.my_url_map.self_link
+#   port_range = "80"
+# }
+resource "google_compute_global_forwarding_rule" "my_forwarding_rule" {
+  name       = "my-forwarding-rule"
+  target     = google_compute_target_http_proxy.my_target_http_proxy.self_link
+  port_range = "80"
+  #ip_address = google_compute_address.my_static_ip.address
+}
+#resource "google_compute_global_forwarding_rule" "my_forwarding_rule_https" {
+ # name       = "my-forwarding-rule-https"
+  #target     = google_compute_target_https_proxy.my_target_proxy.self_link
+  #port_range = "443-443"
+  
+#}
+
+
+
+# # Define the HTTPS forwarding rule
+# resource "google_compute_global_forwarding_rule" "https_rule" {
+#   name       = "https-rule"
+#   target     = google_compute_url_map.my_url_map.self_link
+#   port_range = "443"
+# }
+resource "google_sql_ssl_cert" "my_ssl_cert" {
+  instance = google_sql_database_instance.my_database.name
+  common_name = "my-client-cert" # Give a suitable name
+  #cert = file("./server-ca.pem")
+}

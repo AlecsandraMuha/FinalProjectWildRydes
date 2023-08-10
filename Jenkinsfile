@@ -33,7 +33,24 @@ pipeline {
                 }
             }
         }
-       
+         stage('Tag & Push') {
+            steps {
+                //  Tag the Docker image with GCR URL
+                 sh 'docker tag my-html-css-app  gcr.io/intrepid-period-395206/my-html-css-app'
+
+                //  Push the image to GCR
+                sh 'docker push  gcr.io/intrepid-period-395206/my-html-css-app'
+            }
+        }
+
+        stage('Deploy'){
+            steps{
+                //Deploy with Kubernetes
+                sh 'kubectl apply -f /var/jenkins_home/workspace/My_CICD_ProjectPipeline/FinalProjectWildRydes/'
+                sh 'kubectl apply -f /var/jenkins_home/workspace/My_CICD_ProjectPipeline/FinalProjectWildRydes/'
+                sh 'kubectl apply -f /var/jenkins_home/workspace/My_CICD_ProjectPipeline/FinalProjectWildRydes/'
+            }
+        }
         // stage('Deploy') {
         //     steps {
         //         // Use Ansible to deploy to your Kubernetes cluster
