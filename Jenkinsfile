@@ -50,7 +50,7 @@ pipeline {
 
         stage('Deploy to K8s') {
             steps{
-                sh "sed -i '${JENKINS_HOME}/jobs/${JOB_NAME}/KubernetesPart/${currentBuild.number}'  deployment.yaml"
+                sh "sed -i '${JENKINS_HOME}/jobs/${JOB_NAME}/KubernetesPart/'  deployment.yaml"
                 step([$class: 'KubernetesEngineBuilder', \
                   projectId: env.PROJECT_ID, \
                   clusterName: env.CLUSTER_NAME, \
