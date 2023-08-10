@@ -26,22 +26,14 @@ pipeline {
                 }
             }
         }
-         stage('Build') {
-            steps {
-                script {
-                    dockerImage = docker.build("my-custom-ansible-image:${env.BUILD_ID}", '.')
-                }
-            }
-        }
 
       stage('Deploy with Ansible') {
-            steps {script {
-                    dockerImage.inside('-v $PWD:/ansible') {
+            steps {
                         sh 'ansible-playbook -i inventory.ini playbook.yml'
-                    }
+                
                 }
         }
-        } 
+        
         // stage('Deploy') {
         //     steps {
         //         // Use Ansible to deploy to your Kubernetes cluster
