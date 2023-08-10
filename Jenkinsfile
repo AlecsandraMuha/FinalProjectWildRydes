@@ -1,11 +1,5 @@
 pipeline {
     agent any
-    environment{
-        PROJECT_ID = "intrepid-period-395206"
-        CLUSTER_NAME = "my-gke-cluster"
-        LOCATION = "europe-west1-b"
-        CREDENTIALS_ID = "8f3b3c69e6bc98803131aeb6fdc200bbafe73cb6"
-    }
     stages {
         stage('Hello') {
             steps {
@@ -19,12 +13,6 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Build') {
-      steps {
-        sh 'docker build -t gcr.io/intrepid-period-395206/my-html-css-app /var/jenkins_home/workspace/My_CICD_ProjectPipeline/FinalProjectWildRydes/'
-      }
-    }
-
         stage('Unit Test') {
             steps {
                 script {
@@ -48,18 +36,12 @@ pipeline {
             }
         }
 
-        stage('Deploy to K8s') {
-            steps{
-                //sh "sed -i '${JENKINS_HOME}/workspace/${JOB_NAME}/KubernetesPart/'  deployment.yaml"
-                step([$class: 'KubernetesEngineBuilder', \
-                  projectId: env.PROJECT_ID, \
-                  clusterName: env.CLUSTER_NAME, \
-                  location: env.LOCATION, \
-                  manifestPattern: 'deployment.yaml', \
-                  credentialsId: env.CREDENTIALS_ID, \
-                  verifyDeployments: true])
-                }
+      stage('Deploy with Ansible') {
+            steps {
+                // Run Ansible playbook
+                sh 'ansible-playbook -i inventory.ini playbook.yml'
             }
+        }
         } 
         // stage('Deploy') {
         //     steps {
