@@ -29,22 +29,15 @@ pipeline {
     
         stage('Build Docker Image') {
             steps {
-                script {
-                    // Build the Docker image using the Dockerfile
-                    dockerImage = docker.build("/var/jenkins_home/workspace/websitePipeline/:${env.BUILD_ID}", '.')
+               sh 'docker build -t /var/jenkins_home/workspace/My_CICD_ProjectPipeline/'
                 }
             }
-        }
+        
 
         stage('Run Ansible Playbook') {
-            steps {
-                script {
-                    // Run the Ansible playbook using a Docker container
-                    dockerImage.inside('-v $PWD:/ansible') {
+            steps{
                         sh 'ansible-playbook -i inventory.ini playbook.yaml'
                     }
                 }
             }
         }
-    }
-}
